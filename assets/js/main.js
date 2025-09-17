@@ -250,8 +250,11 @@ function wait(ms) { return new Promise(r => setTimeout(r, ms)); }
   const pageSize = 10;
   let reposAll = [];
   let page = 1;
+  let hadErrors = false;
 
-  loadAll(users).then((repos) => {
+  loadAll(users).then((result) => {
+    const { repos, hadErrors: errs } = result;
+    hadErrors = errs;
     reposAll = repos;
     if (controls) controls.style.display = '';
     renderPage();
@@ -301,9 +304,11 @@ function wait(ms) { return new Promise(r => setTimeout(r, ms)); }
       const card = document.createElement('article');
       card.className = 'project card';
       const h = document.createElement('h4');
-      h.textContent = 'No repositories found';
+      h.textContent = hadErrors ? 'Unable to load GitHub repositories' : 'No repositories found';
       const p = document.createElement('p');
-      p.textContent = 'Public repositories from your GitHub accounts will appear here.';
+      p.textContent = hadErrors
+        ? 'This can happen on slow networks or due to GitHub rate limits. Please retry in a moment.'
+        : 'Public repositories from your GitHub accounts will appear here.';
       card.append(h, p);
       grid.append(card);
       if (controls) controls.style.display = 'none';
@@ -346,10 +351,12 @@ function wait(ms) { return new Promise(r => setTimeout(r, ms)); }
   async function loadAll(usernames) {
     const all = [];
     const results = await Promise.allSettled(usernames.map(u => fetchUserRepos(u)));
+    let errs = false;
     results.forEach((res, idx) => {
       if (res.status === 'fulfilled') {
         all.push(...res.value);
       } else {
+        errs = true;
         console.warn('Skipping user due to error:', usernames[idx], res.reason);
       }
     });
@@ -357,21 +364,32 @@ function wait(ms) { return new Promise(r => setTimeout(r, ms)); }
     const map = new Map();
     for (const r of all) map.set(r.full_name, r);
     // Sort by stargazers then updated_at
-    return Array.from(map.values()).sort((a, b) => {
+    const repos = Array.from(map.values()).sort((a, b) => {
       if (b.stargazers_count !== a.stargazers_count) return b.stargazers_count - a.stargazers_count;
       return new Date(b.updated_at) - new Date(a.updated_at);
     });
+    return { repos, hadErrors: errs };
   }
 
-  async function fetchUserRepos(user) {
-    const url = `https://api.github.com/users/${encodeURIComponent(user)}/repos?per_page=100&sort=updated`;
+  async function fetchUserRepos(user, attempt = 1) {
+    const perPage = 50; // reduce payload to improve reliability on slow networks
+    const url = `https://api.github.com/users/${encodeURIComponent(user)}/repos?per_page=${perPage}&sort=updated`;
     const controller = new AbortController();
-    const t = setTimeout(() => controller.abort('timeout'), 8000);
+    const timeoutMs = attempt === 1 ? 20000 : 30000; // was 8000ms; increase and retry once if needed
+    const t = setTimeout(() => controller.abort('timeout'), timeoutMs);
     try {
-      const res = await fetch(url, { headers: { 'Accept': 'application/vnd.github+json' }, signal: controller.signal });
+      const headers = { 'Accept': 'application/vnd.github+json' };
+      if (cfg.githubToken) headers.Authorization = `Bearer ${cfg.githubToken}`;
+      const res = await fetch(url, { headers, signal: controller.signal, cache: 'no-store' });
       if (!res.ok) throw new Error(`GitHub API error for ${user}: ${res.status}`);
       const data = await res.json();
       return Array.isArray(data) ? data : [];
+    } catch (err) {
+      if (attempt < 2) {
+        console.warn(`Retrying GitHub repos for ${user} due to:`, err);
+        return fetchUserRepos(user, attempt + 1);
+      }
+      throw err;
     } finally {
       clearTimeout(t);
     }
