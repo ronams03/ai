@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en" class="theme-dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="color-scheme" content="dark light" />
+  <title>Futuristic Portfolio</title>
+  <meta name="description" content="A futuristic, animated developer portfolio with neon aesthetics and immersive interactions." />
+
+  <!-- Fonts & Icons -->
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&family=Chakra+Petch:wght@400;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet" />
+  <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="assets/css/style.css" />
+
+  <!-- Libraries -->
+  <script src="https://unpkg.com/animejs@3.2.1/lib/anime.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.8.0/vanilla-tilt.min.js" integrity="sha512-zl3x1bU9oky2bIxxHyQ1bO2WSW3pXE5JEGdy2j+eR6+8cSzrU2r4oDSwzQkqqmbz7e7KcY7QSfPaMZKk9QYx0w==" crossorigin="anonymous" referrerpolicy="no-referrer" defer></script>
+
+  <!-- App Config -->
+  <script src="assets/js/config.js" defer></script>
+
+  <!-- App -->
+  <script type="module" src="assets/js/main.js" defer></script>
+</head>
+<body>
+  <!-- Background Layers -->
+  <canvas id="bg-canvas" aria-hidden="true"></canvas>
+  <div class="scanlines" aria-hidden="true"></div>
+  <div class="grid-overlay" aria-hidden="true"></div>
+
+  <!-- Navigation -->
+  <header class="nav">
+    <div class="nav__left">
+      <button class="logo" aria-label="Home" data-scrollto="#hero">
+        <span>Δ</span> FUTURE
+      </button>
+    </div>
+    <nav class="nav__center">
+      <button data-scrollto="#about">About</button>
+      <button data-scrollto="#skills">Skills</button>
+      <button data-scrollto="#projects">Projects</button>
+      <button data-scrollto="#timeline">Timeline</button>
+      <button data-scrollto="#contact">Contact</button>
+    </nav>
+    <div class="nav__right">
+      <button id="cmdkBtn" class="ghost"><i class='bx bx-command'></i> <span class="hide-sm">Cmd</span>/<span>Ctrl</span>+K</button>
+      <button id="themeToggle" aria-label="Toggle theme" class="ghost">
+        <i class='bx bx-moon'></i>
+      </button>
+    </div>
+  </header>
+
+  <!-- Hero -->
+  <section id="hero" class="section hero">
+    <div class="hero__content">
+      <div class="hero__kicker">WELCOME TO</div>
+      <h1 class="glitch" data-text="THE PORTAL">THE PORTAL</h1>
+      <h2 class="hero__name">I'm <span class="neon">ROBERTH NAMOC</span></h2>
+      <p class="hero__roles">
+        <span class="role-typing" data-roles='["AI Engineer","Full‑Stack Developer","Creative Technologist","Open‑Source Builder"]'></span>
+      </p>
+      <div class="hero__cta">
+        <a class="btn btn--primary" data-scrollto="#projects"><i class='bx bx-rocket'></i> Explore Projects</a>
+        <a class="btn btn--glass" href="#" id="downloadResume"><i class='bx bx-download'></i> Resume</a>
+      </div>
+      <div class="hero__stats">
+        <div class="stat"><span class="num" data-count="7">3</span><span class="label">Years Exp</span></div>
+        <div class="stat"><span class="num" data-count="42">80</span><span class="label">Projects</span></div>
+        <div class="stat"><span class="num" data-count="12">5</span><span class="label">Certs</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- About -->
+  <section id="about" class="section container reveal">
+    <div class="terminal card tilt" data-tilt data-tilt-max="10" data-tilt-speed="400">
+      <div class="terminal__top">
+        <span class="dot red"></span>
+        <span class="dot yellow"></span>
+        <span class="dot green"></span>
+        <span class="path">~/about/me</span>
+      </div>
+      <pre class="terminal__body"><code>
+> whoami
+> FRONT-END and BACKEND DEVELOPER, PROMPT ENGINEER, AI RESEARCH, AI BUILDER
+
+> mission
+> Build human-centered tools with delightful micro-interactions and practical magic.
+
+> stack
+> TypeScript, Node, Python, Go, React, Svelte, Tailwind, Three.js, Anime.js, AWS, Docker, PHP, HTML, CSS, JS, Dart, Flutter, MySql
+      </code></pre>
+    </div>
+  </section>
+
+  <!-- Skills -->
+  <section id="skills" class="section container reveal">
+    <h3 class="section__title">Skills Matrix</h3>
+    <div class="skills">
+      <div class="skill card tilt" data-level="92" data-label="JavaScript">
+        <div class="ring"><span>JS</span></div>
+        <div class="meta"><b>JavaScript</b><small>ESNext, TS, Node</small></div>
+      </div>
+      <div class="skill card tilt" data-level="88" data-label="React">
+        <div class="ring"><span>R</span></div>
+        <div class="meta"><b>React</b><small>Hooks, Next.js</small></div>
+      </div>
+      <div class="skill card tilt" data-level="84" data-label="Python">
+        <div class="ring"><span>Py</span></div>
+        <div class="meta"><b>Python</b><small>FastAPI, Data</small></div>
+      </div>
+      <div class="skill card tilt" data-level="80" data-label="DevOps">
+        <div class="ring"><span>Δ</span></div>
+        <div class="meta"><b>DevOps</b><small>AWS, CI/CD</small></div>
+      </div>
+      <div class="skill card tilt" data-level="76" data-label="Design">
+        <div class="ring"><span>UX</span></div>
+        <div class="meta"><b>Design</b><small>Figma, Motion</small></div>
+      </div>
+      <div class="skill card tilt" data-level="70" data-label="3D">
+        <div class="ring"><span>3D</span></div>
+        <div class="meta"><b>3D</b><small>Three.js, GLSL</small></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Projects -->
+  <section id="projects" class="section container reveal">
+    <h3 class="section__title">Highlighted Projects</h3>
+    <div id="projectsGrid" class="projects">
+      <article class="project card">
+        <h4>Loading GitHub repositories…</h4>
+        <p>This will list public repos from your GitHub accounts.</p>
+      </article>
+    </div>
+    <div id="projectsControls" class="projects__controls">
+      <div class="pager">
+        <button id="pgPrev" class="btn btn--glass btn--small" disabled><i class='bx bx-left-arrow-alt'></i> Prev</button>
+        <span id="pgInfo">Page 1</span>
+        <button id="pgNext" class="btn btn--glass btn--small">Next <i class='bx bx-right-arrow-alt'></i></button>
+      </div>
+      <button id="pgViewAll" class="btn btn--primary btn--small"><i class='bx bx-grid-alt'></i> View All</button>
+    </div>
+  </section>
+
+  <!-- Timeline -->
+  <section id="timeline" class="section container reveal">
+    <h3 class="section__title">Experience</h3>
+    <div class="timeline">
+      <div class="t-item">
+        <div class="t-dot"></div>
+        <div class="t-content">
+          <h4>Senior Engineer @ FutureLabs</h4>
+          <small>2023 — Present</small>
+          <p>Lead AI features across multi-tenant platform, built DX tooling and design systems.</p>
+        </div>
+      </div>
+      <div class="t-item">
+        <div class="t-dot"></div>
+        <div class="t-content">
+          <h4>Full‑Stack Dev @ NovaCloud</h4>
+          <small>2020 — 2023</small>
+          <p>Scalable microservices, observability, and delightful frontend interactions.</p>
+        </div>
+      </div>
+      <div class="t-item">
+        <div class="t-dot"></div>
+        <div class="t-content">
+          <h4>Creative Technologist (Freelance)</h4>
+          <small>2017 — 2020</small>
+          <p>Rapid prototyping, data stories, and experimental web art.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact -->
+  <section id="contact" class="section container reveal">
+    <h3 class="section__title">Contact</h3>
+    <div class="contact">
+      <div class="card tilt">
+        <h4>Let's build the future</h4>
+        <p>Open to collaborations, freelance, and full‑time roles. Say hello!</p>
+        <div class="contact__actions">
+          <a class="btn btn--primary" href="mailto:you@example.com"><i class='bx bx-envelope'></i> Email</a>
+          <button id="copyEmail" class="btn btn--glass" data-email="you@example.com"><i class='bx bx-copy'></i> Copy Email</button>
+        </div>
+        <div class="socials">
+          <a href="#" aria-label="GitHub" class="social"><i class='bx bxl-github'></i></a>
+          <a href="#" aria-label="Facebook" class="social"><i class='bx bxl-facebook'></i></a>
+          <a href="#" aria-label="LinkedIn" class="social"><i class='bx bxl-linkedin'></i></a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <p>© <span id="year"></span> Your Name • Crafted with <span class="neon">Motivation</span> & love</p>
+  </footer>
+
+  <!-- Command Palette -->
+  <!-- Projects Modal -->
+  <div id="projectsModal" role="dialog" aria-modal="true" aria-hidden="true">
+    <div class="projects-modal__panel">
+      <div class="projects-modal__top">
+        <h4>All Projects</h4>
+        <button id="pgClose" class="btn btn--glass btn--small" aria-label="Close"><i class='bx bx-x'></i></button>
+      </div>
+      <div id="projectsAllGrid" class="projects"></div>
+    </div>
+  </div>
+  <div id="cmdk" role="dialog" aria-modal="true" aria-hidden="true">
+    <div class="cmdk__panel">
+      <div class="cmdk__top">
+        <i class='bx bx-search'></i>
+        <input id="cmdkInput" type="text" placeholder="Type a command or search (e.g., 'projects')" aria-label="Command input" />
+        <kbd>Esc</kbd>
+      </div>
+      <ul id="cmdkList" class="cmdk__list" role="listbox" aria-label="Commands">
+        <li data-target="#hero"><i class='bx bx-home'></i> Home</li>
+        <li data-target="#about"><i class='bx bx-id-card'></i> About</li>
+        <li data-target="#skills"><i class='bx bx-doughnut-chart'></i> Skills</li>
+        <li data-target="#projects"><i class='bx bx-grid-alt'></i> Projects</li>
+        <li data-target="#timeline"><i class='bx bx-time-five'></i> Timeline</li>
+        <li data-target="#contact"><i class='bx bx-paper-plane'></i> Contact</li>
+        <li data-action="theme"><i class='bx bx-moon'></i> Toggle Theme</li>
+        <li data-action="resume"><i class='bx bx-download'></i> Download Resume</li>
+      </ul>
+      <div class="cmdk__hint">Use ↑/↓ to navigate • Enter to execute</div>
+    </div>
+  </div>
+</body>
+</html>
