@@ -345,11 +345,14 @@ function wait(ms) { return new Promise(r => setTimeout(r, ms)); }
 
   async function loadAll(usernames) {
     const all = [];
-    for (const user of usernames) {
-      // eslint-disable-next-line no-await-in-loop
-      const repos = await fetchUserRepos(user);
-      all.push(...repos);
-    }
+    const results = await Promise.allSettled(usernames.map(u => fetchUserRepos(u)));
+    results.forEach((res, idx) => {
+      if (res.status === 'fulfilled') {
+        all.push(...res.value);
+      } else {
+        console.warn('Skipping user due to error:', usernames[idx], res.reason);
+      }
+    });
     // De-duplicate by full_name
     const map = new Map();
     for (const r of all) map.set(r.full_name, r);
@@ -362,10 +365,16 @@ function wait(ms) { return new Promise(r => setTimeout(r, ms)); }
 
   async function fetchUserRepos(user) {
     const url = `https://api.github.com/users/${encodeURIComponent(user)}/repos?per_page=100&sort=updated`;
-    const res = await fetch(url, { headers: { 'Accept': 'application/vnd.github+json' } });
-    if (!res.ok) throw new Error(`GitHub API error for ${user}: ${res.status}`);
-    const data = await res.json();
-    return Array.isArray(data) ? data : [];
+    const controller = new AbortController();
+    const t = setTimeout(() => controller.abort('timeout'), 8000);
+    try {
+      const res = await fetch(url, { headers: { 'Accept': 'application/vnd.github+json' }, signal: controller.signal });
+      if (!res.ok) throw new Error(`GitHub API error for ${user}: ${res.status}`);
+      const data = await res.json();
+      return Array.isArray(data) ? data : [];
+    } finally {
+      clearTimeout(t);
+    }
   }
 
   function createRepoCard(repo, withTilt = true) {
