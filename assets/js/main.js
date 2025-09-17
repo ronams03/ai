@@ -246,6 +246,31 @@ function wait(ms) { return new Promise(r => setTimeout(r, ms)); }
     : extractUserFromUrl(cfg.socials?.github);
   if (!users || users.length === 0) return;
 
+  // Enhance controls: group right-side buttons and add direct GitHub links
+  if (controls) {
+    const rightGroup = document.createElement('div');
+    rightGroup.style.display = 'flex';
+    rightGroup.style.alignItems = 'center';
+    rightGroup.style.gap = '8px';
+
+    if (pgViewAll && pgViewAll.parentElement === controls) {
+      rightGroup.append(pgViewAll);
+    }
+
+    users.forEach((user) => {
+      const link = document.createElement('a');
+      link.className = 'btn btn--glass btn--small';
+      link.href = `https://github.com/${encodeURIComponent(user)}?tab=repositories`;
+      link.target = '_blank';
+      link.rel = 'noopener noreferrer';
+      link.textContent = `GitHub: ${user}`;
+      rightGroup.append(link);
+    });
+
+    // Append as a second child so layout remains: [pager] .... [rightGroup]
+    controls.append(rightGroup);
+  }
+
   // State
   const pageSize = 10;
   let reposAll = [];
@@ -433,10 +458,18 @@ function wait(ms) { return new Promise(r => setTimeout(r, ms)); }
     code.href = repo.html_url;
     code.target = '_blank';
     code.rel = 'noopener noreferrer';
-    code.textContent = 'Code';
+    code.textContent = 'Project';
+    code.setAttribute('aria-label', 'Open repository on GitHub');
     actions.append(code);
 
     article.append(badge, h4, p, meta, actions);
+
+    // Make the whole card clickable to open the repo (excluding inner buttons/links)
+    article.addEventListener('click', (e) => {
+      const target = e.target;
+      if (target && typeof target.closest === 'function' && target.closest('a')) return;
+      window.open(repo.html_url, '_blank', 'noopener,noreferrer');
+    });
     return article;
   }
 
