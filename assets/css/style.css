@@ -300,3 +300,41 @@ body.modal-open { overflow: hidden; }
 /* Toast */
 .toast { position: fixed; left: 50%; bottom: 24px; transform: translateX(-50%) translateY(20px); background: var(--surface-2); border: 1px solid var(--border); color: var(--text); padding: 10px 14px; border-radius: 10px; box-shadow: var(--shadow); z-index: 120; opacity: 0; transition: opacity .2s ease, transform .2s ease; }
 .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+/* Mobile responsiveness */
+@media (max-width: 480px) {
+  .nav { padding: 10px 12px; gap: 8px; }
+  .nav__center { gap: 6px; overflow-x: auto; scrollbar-width: none; }
+  .nav__center::-webkit-scrollbar { display: none; }
+  .nav__center button { padding: 8px 10px; font-size: .9rem; }
+
+  .section { padding: 48px 14px; }
+  .section__title { font-size: 1.2rem; }
+
+  .hero { min-height: auto; padding-top: 40px; }
+  .hero__content { max-width: 100%; }
+  .glitch { font-size: clamp(1.8rem, 9vw, 3rem); }
+  .hero__kicker { font-size: .75rem; letter-spacing: .3em; }
+  .hero__name { font-size: 1.1rem; }
+  .hero__cta { gap: 8px; }
+  .hero__stats { gap: 8px; flex-wrap: wrap; }
+  .stat { min-width: 100px; padding: 8px 10px; }
+  .stat .num { font-size: 1.3rem; }
+
+  .skills { grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); }
+
+  .projects { grid-template-columns: 1fr; }
+  #projectsModal .projects { grid-template-columns: 1fr; }
+  .projects__controls { flex-direction: column; align-items: stretch; gap: 10px; }
+  .projects__controls .pager { justify-content: space-between; }
+  .projects__controls #pgInfo { min-width: 0; flex: 1; text-align: center; }
+
+  .cmdk__panel { width: 94vw; }
+}
+
+/* Small landscape phones */
+@media (max-width: 360px) {
+  .glitch { font-size: clamp(1.6rem, 10vw, 2.6rem); }
+  .nav__right .ghost span { display: none; }
+  .stat { min-width: 92px; }
+}
